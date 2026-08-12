@@ -1,5 +1,13 @@
 [
   {
+    "alias": [],
+    "command": "apex:get:invalid-classes",
+    "flagAliases": ["apiversion", "targetusername", "u"],
+    "flagChars": ["o"],
+    "flags": ["api-version", "flags-dir", "json", "target-org"],
+    "plugin": "@salesforce/plugin-apex"
+  },
+  {
     "alias": ["force:apex:log:get"],
     "command": "apex:get:log",
     "flagAliases": ["apiversion", "logid", "output-directory", "outputdir", "targetusername", "u"],
@@ -78,8 +86,8 @@
       "flags-dir",
       "json",
       "loglevel",
-      "poll-interval",
       "output-dir",
+      "poll-interval",
       "result-format",
       "suite-names",
       "synchronous",
@@ -99,6 +107,7 @@
     "plugin": "@salesforce/plugin-apex"
   },
   {
+    "alias": [],
     "command": "logic:get:test",
     "flagAliases": [
       "apiversion",
