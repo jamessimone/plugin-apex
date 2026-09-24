@@ -1,7 +1,7 @@
 [
   {
     "alias": [],
-    "command": "apex:get:invalid-classes",
+    "command": "apex:get:compile-status",
     "flagAliases": ["apiversion", "targetusername", "u"],
     "flagChars": ["o"],
     "flags": ["api-version", "flags-dir", "json", "target-org"],

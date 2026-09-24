@@ -1,6 +1,6 @@
 # summary
 
-Fetches Apex classes that are currently invalid.
+Fetches the compilation status for Apex classes that are currently invalid.
 
 # description
 

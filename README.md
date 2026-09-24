@@ -87,6 +87,7 @@ Happy debugging!
 
 <!-- commands -->
 
+- [`sf apex get compile-status`](#sf-apex-get-compile-status)
 - [`sf apex get log`](#sf-apex-get-log)
 - [`sf apex get test`](#sf-apex-get-test)
 - [`sf apex list log`](#sf-apex-list-log)
@@ -95,6 +96,39 @@ Happy debugging!
 - [`sf apex tail log`](#sf-apex-tail-log)
 - [`sf logic get test`](#sf-logic-get-test)
 - [`sf logic run test`](#sf-logic-run-test)
+
+## `sf apex get compile-status`
+
+Fetches any Apex classes in your org with compilation status issues.
+
+```
+USAGE
+  $ sf apex get compile-status -o <value> [--json] [--flags-dir <value>] [--api-version <value>]
+
+FLAGS
+  -o, --target-org=<value>   (required) Username or alias of the target org. Not required if the `target-org`
+                             configuration variable is already set.
+      --api-version=<value>  Override the api version used for api requests made by this command
+
+GLOBAL FLAGS
+  --flags-dir=<value>  Import flag values from a directory.
+  --json               Format output as json.
+
+DESCRIPTION
+  Fetches invalid Apex classes, including the problems associated with their current compilation status.
+
+
+EXAMPLES
+  Fetches invalid classes in your default org:
+
+    $ sf apex get compile-status
+
+  Fetch invalid classes in the org with the specified username:
+
+    $ sf apex get compile-status --target-org me@my.org
+```
+
+_See code: [src/commands/apex/get/log.ts](https://github.com/salesforcecli/plugin-apex/blob/4.1.0/src/commands/apex/get/log.ts)_
 
 ## `sf apex get log`
 

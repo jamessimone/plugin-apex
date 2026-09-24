@@ -23,7 +23,7 @@ import {
 import { Messages } from '@salesforce/core';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
-const messages = Messages.loadMessages('@salesforce/plugin-apex', 'get-invalid-classes');
+const messages = Messages.loadMessages('@salesforce/plugin-apex', 'get-compile-status');
 
 export type ApexClassProblem = {
   line: number;
@@ -43,7 +43,7 @@ export type CompilationResult = {
   results: InvalidApexClassResult[];
 };
 
-export default class GetInvalidClasses extends SfCommand<CompilationResult> {
+export default class GetCompileStatus extends SfCommand<CompilationResult> {
   public static readonly flags = {
     'target-org': requiredOrgFlagWithDeprecations,
     'api-version': orgApiVersionFlagWithDeprecations,
@@ -55,7 +55,7 @@ export default class GetInvalidClasses extends SfCommand<CompilationResult> {
   protected cancellationTokenSource = new CancellationTokenSource();
 
   public async run(): Promise<CompilationResult> {
-    const { flags } = await this.parse(GetInvalidClasses);
+    const { flags } = await this.parse(GetCompileStatus);
 
     // graceful shutdown
     const exitHandler = async (): Promise<void> => {

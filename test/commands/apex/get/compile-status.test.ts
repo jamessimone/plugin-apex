@@ -18,10 +18,10 @@ import sinon from 'sinon';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import { Org } from '@salesforce/core';
-import GetInvalidClasses from '../../../../src/commands/apex/get/invalid-classes.js';
-import type { CompilationResult } from '../../../../src/commands/apex/get/invalid-classes.js';
+import GetCompileStatus from '../../../../src/commands/apex/get/compile-status.js';
+import type { CompilationResult } from '../../../../src/commands/apex/get/compile-status.js';
 
-describe('apex:get:invalid-classes', () => {
+describe('apex:get:compile-status', () => {
   let sandbox: sinon.SinonSandbox;
   let uxStub: ReturnType<typeof stubSfCommandUx>;
 
@@ -53,7 +53,7 @@ describe('apex:get:invalid-classes', () => {
 
     sandbox.stub(Org, 'create').resolves(org as unknown as Org);
 
-    const result = await GetInvalidClasses.run([]);
+    const result = await GetCompileStatus.run([]);
     expect(result).to.deep.equal(mockCompilationResult);
     expect(uxStub.log.called).to.be.false;
   });
@@ -105,7 +105,7 @@ describe('apex:get:invalid-classes', () => {
 
     sandbox.stub(Org, 'create').resolves(org as unknown as Org);
 
-    const result = await GetInvalidClasses.run([]);
+    const result = await GetCompileStatus.run([]);
     expect(result).to.deep.equal(mockCompilationResult);
     expect(uxStub.table.calledOnce).to.be.true;
 
@@ -155,9 +155,9 @@ describe('apex:get:invalid-classes', () => {
     };
 
     sandbox.stub(Org, 'create').resolves(org as unknown as Org);
-    sandbox.stub(GetInvalidClasses.prototype, 'jsonEnabled').returns(true);
+    sandbox.stub(GetCompileStatus.prototype, 'jsonEnabled').returns(true);
 
-    const result = await GetInvalidClasses.run(['--json']);
+    const result = await GetCompileStatus.run(['--json']);
     expect(result).to.deep.equal(mockCompilationResult);
     expect(uxStub.table.called).to.be.false;
   });
@@ -179,7 +179,7 @@ describe('apex:get:invalid-classes', () => {
 
     sandbox.stub(Org, 'create').resolves(org as unknown as Org);
 
-    await GetInvalidClasses.run([]);
+    await GetCompileStatus.run([]);
 
     expect(requestStub.calledOnce).to.be.true;
     const callArgs = requestStub.firstCall.args[0];
@@ -206,7 +206,7 @@ describe('apex:get:invalid-classes', () => {
 
     sandbox.stub(Org, 'create').resolves(org as unknown as Org);
 
-    await GetInvalidClasses.run([]);
+    await GetCompileStatus.run([]);
 
     expect((process.on as sinon.SinonStub).calledWith('SIGINT')).to.be.true;
     expect((process.on as sinon.SinonStub).calledWith('SIGTERM')).to.be.true;
@@ -252,7 +252,7 @@ describe('apex:get:invalid-classes', () => {
 
     sandbox.stub(Org, 'create').resolves(org as unknown as Org);
 
-    const result = await GetInvalidClasses.run([]);
+    const result = await GetCompileStatus.run([]);
     expect(result.results[0].problems).to.have.lengthOf(3);
     expect(result.results[0].problems[1].line).to.equal(15);
     expect(result.results[0].problems[2].message).to.equal('Error 3');
@@ -288,7 +288,7 @@ describe('apex:get:invalid-classes', () => {
 
     sandbox.stub(Org, 'create').resolves(org as unknown as Org);
 
-    const result = await GetInvalidClasses.run([]);
+    const result = await GetCompileStatus.run([]);
     expect(result.results[0].namespace).to.equal('');
   });
 
@@ -322,7 +322,7 @@ describe('apex:get:invalid-classes', () => {
 
     sandbox.stub(Org, 'create').resolves(org as unknown as Org);
 
-    await GetInvalidClasses.run([]);
+    await GetCompileStatus.run([]);
 
     const tableCall = uxStub.table.firstCall;
     const tableData = (tableCall.args[0] as Record<string, unknown>).data as Array<Record<string, unknown>>;
