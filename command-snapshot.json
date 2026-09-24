@@ -56,8 +56,8 @@
     "alias": ["force:apex:execute"],
     "command": "apex:run",
     "flagAliases": ["apexcodefile", "apiversion", "targetusername", "u"],
-    "flagChars": ["f", "o"],
-    "flags": ["api-version", "file", "flags-dir", "json", "loglevel", "target-org"],
+    "flagChars": ["d", "f", "o"],
+    "flags": ["api-version", "category-level", "debug-level", "file", "flags-dir", "json", "loglevel", "target-org"],
     "plugin": "@salesforce/plugin-apex"
   },
   {

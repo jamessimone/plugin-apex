@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unused-vars, @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { join } from 'node:path';
 import fs from 'node:fs';
 import { expect } from 'chai';
@@ -131,6 +131,90 @@ describe('apex:execute', () => {
     expect(executeServiceStub.args[0]).to.deep.equal([
       {
         userInput: true,
+      },
+    ]);
+  });
+
+  it('passes debug-level flag to executeAnonymous', async () => {
+    const file = join('Users', 'test', 'path', 'to', 'file');
+    const executeServiceStub = sandboxStub
+      .stub(ExecuteService.prototype, 'executeAnonymous')
+      .resolves({ compiled: true, success: true, logs: log });
+
+    await Run.run(['--file', file, '--debug-level', 'DETAIL']);
+
+    expect(executeServiceStub.args[0]).to.deep.equal([
+      {
+        apexFilePath: file,
+        debugLevel: 'DETAIL',
+      },
+    ]);
+  });
+
+  it('passes category-level flags to executeAnonymous', async () => {
+    const file = join('Users', 'test', 'path', 'to', 'file');
+    const executeServiceStub = sandboxStub
+      .stub(ExecuteService.prototype, 'executeAnonymous')
+      .resolves({ compiled: true, success: true, logs: log });
+
+    await Run.run(['--file', file, '--category-level', 'Apex_code=FINEST', '--category-level', 'Db=FINE']);
+
+    expect(executeServiceStub.args[0]).to.deep.equal([
+      {
+        apexFilePath: file,
+        debugCategories: [
+          { category: 'Apex_code', level: 'FINEST' },
+          { category: 'Db', level: 'FINE' },
+        ],
+      },
+    ]);
+  });
+
+  it('throws on invalid category-level format', async () => {
+    sandboxStub.stub(ExecuteService.prototype, 'executeAnonymous').resolves({ compiled: true, success: true });
+
+    try {
+      await Run.run(['--file', 'test.apex', '--category-level', 'bad-format']);
+      expect.fail('should have thrown');
+    } catch (e) {
+      expect((e as Error).message).to.include('Invalid --category-level format');
+    }
+  });
+
+  it('throws on invalid category name', async () => {
+    sandboxStub.stub(ExecuteService.prototype, 'executeAnonymous').resolves({ compiled: true, success: true });
+
+    try {
+      await Run.run(['--file', 'test.apex', '--category-level', 'FakeCategory=FINEST']);
+      expect.fail('should have thrown');
+    } catch (e) {
+      expect((e as Error).message).to.include('Invalid category');
+    }
+  });
+
+  it('throws on invalid category level value', async () => {
+    sandboxStub.stub(ExecuteService.prototype, 'executeAnonymous').resolves({ compiled: true, success: true });
+
+    try {
+      await Run.run(['--file', 'test.apex', '--category-level', 'Apex_code=INVALID']);
+      expect.fail('should have thrown');
+    } catch (e) {
+      expect((e as Error).message).to.include('Invalid level');
+    }
+  });
+
+  it('deduplicates category-level entries with last-wins', async () => {
+    const file = join('Users', 'test', 'path', 'to', 'file');
+    const executeServiceStub = sandboxStub
+      .stub(ExecuteService.prototype, 'executeAnonymous')
+      .resolves({ compiled: true, success: true, logs: log });
+
+    await Run.run(['--file', file, '--category-level', 'Apex_code=DEBUG', '--category-level', 'Apex_code=FINEST']);
+
+    expect(executeServiceStub.args[0]).to.deep.equal([
+      {
+        apexFilePath: file,
+        debugCategories: [{ category: 'Apex_code', level: 'FINEST' }],
       },
     ]);
   });
